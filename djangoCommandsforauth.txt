@@ -1,0 +1,4 @@
+python3 -m venv venv
+pip install django django-rest-framework django-cors-headers
+
+https://medium.com/swlh/jwt-auth-with-djangorest-api-9fb32b99b33c
