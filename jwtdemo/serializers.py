@@ -31,7 +31,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         # PUT THEIR DATA INTO DICTIONARY FOR BEING SERIALIZED
-
+        ## validated_data is the dictionary that is being passed from the frontend 
+        ## in case of angular validated data is the observable DI service that is being passed as a dictionary using forms through a browser
+        ## via URL
+        
         username = validated_data["username"]
         email = validated_data["email"]
         password = validated_data["password"]
