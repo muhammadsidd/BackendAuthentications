@@ -4,6 +4,8 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 # Create your models here.
+#custom user manager gives you more control over what user model should or should not have. 
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
         if not email:
@@ -67,7 +69,8 @@ class CustomUserManager(BaseUserManager):
         user.is_staff = True
         user.save(using=self._db)
         return user
-        
+
+#Custom user lets you add custom fields in addition to the built in features provided by AbstractBaseUser
 class CustomUser(AbstractBaseUser):
     ADMIN = 'admin'
     STAFF = 'staff'
