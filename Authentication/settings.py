@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'basicpermissions',
     'jwtdemo',
+    'library',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'jwtdemo.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

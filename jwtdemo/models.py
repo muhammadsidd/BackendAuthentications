@@ -2,9 +2,7 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
-from django.db.models import Sum
-from django.db.models.functions import Coalesce
-from django.contrib.auth import get_user_model
+
 # Create your models here.
 #custom user manager gives you more control over what user model should or should not have. 
 
