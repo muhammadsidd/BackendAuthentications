@@ -1,8 +1,10 @@
 from django.db import models
-from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
+from django.contrib.auth import get_user_model
 # Create your models here.
 #custom user manager gives you more control over what user model should or should not have. 
 
@@ -49,38 +51,17 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_staffuser(self, email, first_name, last_name,  password=None):
-        if not email:
-            raise ValueError("User must have an email")
-        if not password:
-            raise ValueError("User must have a password")
-        if not first_name:
-            raise ValueError("User must have a first name")
-        if not last_name:
-            raise ValueError("User must have a last name")
-
-        user = self.model(
-            email=self.normalize_email(email)
-        )
-        user.first_name = first_name
-        user.last_name = last_name
-        user.set_password(password)  # change password to hash
-        user.is_admin = False
-        user.is_staff = True
-        user.save(using=self._db)
-        return user
-
 #Custom user lets you add custom fields in addition to the built in features provided by AbstractBaseUser
-class CustomUser(AbstractBaseUser):
-    ADMIN = 'admin'
-    STAFF = 'staff'
-    STATUS = [
-        (ADMIN, _('Admin User')),
-        (STAFF, _('Staff User')),
-    ]
-    email = models.EmailField(_('email address'), unique=True)
-    first_name = models.CharField(_('first name'), max_length=30)
-    last_name = models.CharField(_('last name'), max_length=30)
+class User(AbstractBaseUser):
+    # ADMIN = 'admin'
+    # STAFF = 'staff'
+    # STATUS = [
+    #     (ADMIN, _('Admin User')),
+    #     (STAFF, _('Staff User')),
+    # ]
+    email = models.EmailField(('email address'), unique=True)
+    first_name = models.CharField(('first name'), max_length=30)
+    last_name = models.CharField(('last name'), max_length=30)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  # a admin user; non super-user
     is_admin = models.BooleanField(default=False)
@@ -104,3 +85,4 @@ class CustomUser(AbstractBaseUser):
 
     def __str__(self):
         return "{}".format(self.email)
+
