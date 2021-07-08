@@ -7,34 +7,15 @@ from rest_framework import serializers
 User = get_user_model()
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
-
-    password = serializers.CharField(
-        write_only=True, required = True, style = {"input_type": "password"})
-    password2 = serializers.CharField(
-        style={"input": "password"}, write_only = True, label= "Confirm password")
+class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "username",
-            "email",
-            "password",
-            "password2",
-        ]
-
-        # additional keyword arguments on fields, using the extra_kwargs option.
-        # As in the case of read_only_fields, this means
-        # you do not need to explicitly declare the field on the serializer.
+        fields = "__all__"
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
-
-        # PUT THEIR DATA INTO DICTIONARY FOR BEING SERIALIZED
-        ## validated_data is the dictionary that is being passed from the frontend 
-        ## in case of angular validated data is the observable DI service that is being passed as a dictionary using forms through a browser
-        ## via URL
-        
+      
         username = validated_data["username"]
         email = validated_data["email"]
         password = validated_data["password"]
@@ -48,12 +29,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"password": "The two passwords differ. "}
             )
-
-        # CREATE THE USER BY PUTTING THE SERIALIZER DATA INTO THE USER OBJECT
-        user = User(username=username, email=email)
-        user.set_password(password)
+        user = User.objects.create_user(**validated_data)
         user.save()
-
         return user
+    
+    def update(self, instance, validated_data):
+        return User.objects.update(instance,validated_data)
 
-
+class UserViewset(viewset.Viewset):
+    pass
