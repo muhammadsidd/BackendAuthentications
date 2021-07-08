@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, get_user_model
 from django.db.models import query
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, viewsets,
+from rest_framework import permissions, viewsets, serializers
 from rest_framework import response, decorators, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, Token
@@ -38,7 +38,7 @@ User = get_user_model()
 
 #     return response.Response(res, status.HTTP_201_CREATED)
 
-class UserViewset(viewsets.Viewset):
+class UserViewset(viewsets.ViewSet):
     
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdateOwnProfile,)

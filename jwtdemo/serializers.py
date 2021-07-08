@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
+from rest_framework import serializers, viewsets
 
 User = get_user_model()
 
@@ -36,5 +36,4 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         return User.objects.update(instance,validated_data)
 
-class UserViewset(viewset.Viewset):
-    pass
+
