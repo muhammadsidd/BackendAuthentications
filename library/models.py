@@ -24,7 +24,7 @@ class Author(models.Model):
     last_name = models.CharField(max_length=30)
 
 class Book(models.Model):
-    owner = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     copies_sold = models.PositiveIntegerField()
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
