@@ -71,4 +71,3 @@ class UserViewset(viewsets.ViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
