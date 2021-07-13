@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.contrib.auth import get_user_model
-from rest_framework import serializers, viewsets
+from rest_framework import serializers,
 
 User = get_user_model()
 
