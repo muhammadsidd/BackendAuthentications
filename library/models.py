@@ -23,8 +23,14 @@ class Author(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return '{a} {b}'.format(a = self.first_name, b = self.last_name)
+
 class Book(models.Model):
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     copies_sold = models.PositiveIntegerField()
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+
+    def __str__(self):
+        return self.title

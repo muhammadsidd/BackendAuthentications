@@ -1,3 +1,7 @@
+from django.contrib.auth.models import Permission
+from django.core.exceptions import PermissionDenied
+from basicpermissions.views import IsOwner
+from re import search
 from django.contrib.auth import authenticate, get_user_model
 from django.db.models import query
 from django.shortcuts import get_object_or_404
@@ -10,6 +14,7 @@ from rest_framework.authentication import TokenAuthentication
 from . import models
 from .import permissions
 from jwtdemo import serializers
+from rest_framework import filters
 # from django.http import Http404
 # from django.shortcuts import render
 # from rest_framework import viewsets, status, mixins, generics
@@ -43,6 +48,9 @@ class UserViewset(viewsets.ViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdateOwnProfile,)
     serializer_class = UserSerializer
+    filter_backends =(filters.SearchFilter,)
+    search_fields = ('email','first_name','last_name')
+
     def list(self, request):
         queryset = User.objects.all()
         serializer = self.serializer_class(queryset, many = True)
@@ -50,14 +58,16 @@ class UserViewset(viewsets.ViewSet):
         return Response(serializer.data)
     
     def create(self, request):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save(
-                created_by=request.user,
-                modified_by=request.user
-            )
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+        if request.user.is_authenticated:
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                serializer.save(
+                    created_by=request.user,
+                    modified_by=request.user
+                )
+                return Response(serializer.data, status=201)
+        
+        raise PermissionDenied
     
     def retrieve(self, request, pk=None):
         queryset = User.objects.all()
@@ -70,4 +80,6 @@ class UserViewset(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 

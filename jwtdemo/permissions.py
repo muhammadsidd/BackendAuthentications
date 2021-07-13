@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from rest_framework import permissions
 
 class UpdateOwnProfile(permissions.BasePermission):
@@ -11,3 +12,8 @@ class UpdateOwnProfile(permissions.BasePermission):
             return True
         
         return obj.id == request.user.id
+    
+    def is_admin(self, request, view, obj):
+        if request.user.is_Admin:
+            return True
+        raise PermissionDenied
