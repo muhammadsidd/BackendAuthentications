@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Permission
 from django.core.exceptions import PermissionDenied
+from rest_framework.views import APIView
 from basicpermissions.views import IsOwner
 from re import search
 from django.contrib.auth import authenticate, get_user_model
@@ -15,6 +16,7 @@ from . import models
 from .import permissions1
 from jwtdemo import serializers
 from rest_framework import filters
+import json
 # from django.http import Http404
 # from django.shortcuts import render
 # from rest_framework import viewsets, status, mixins, generics
@@ -79,6 +81,37 @@ class UserViewset(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class FibNumViewset(APIView):
+    def get (self, reuest, format= None):
+        nterms = int(input("How many terms? "))
+        # first two terms
+        n1, n2 = 0, 1
+        count = 0
+        l1=[]
+        l2=[]
+
+        # check if the number of terms is valid
+        if nterms <= 0:
+            print("Please enter a positive integer")
+        elif nterms == 1:
+            print("Fibonacci sequence upto", nterms, ":")
+            print(n1)
+        else:
+            print("Fibonacci sequence")
+            while count < nterms: 
+                l1.append(count)
+                l2.append(n1)
+                print(n1)
+                nth = n1 + n2
+                # update values
+                n1 = n2
+                n2 = nth
+            
+                count += 1
+        d1= dict(zip(l1,l2))
+        return Response (json.dumps(d1))
+
 
 
 
