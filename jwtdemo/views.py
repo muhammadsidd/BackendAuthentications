@@ -110,7 +110,7 @@ class FibNumViewset(APIView):
             
                 count += 1
         d1= dict(zip(l1,l2))
-        return Response (json.dumps(d1))
+        return Response (json.dumps(d1)
 
 
 
