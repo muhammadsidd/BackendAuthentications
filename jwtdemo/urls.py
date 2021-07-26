@@ -18,5 +18,5 @@ router.register('user-viewset', views.UserViewset, basename='user-viewset')
 urlpatterns =[
     url(r'',include(router.urls)),
     path('register/', registration, name = 'register'),
-    path('fib/', views.FibNumViewset.as_view())
+    path('fib/', views.FibNumViewset.as_view()),
 ]
