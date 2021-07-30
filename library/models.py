@@ -7,6 +7,15 @@ from django.conf import settings
 User = settings.AUTH_USER_MODEL
 #User = get_user_model()
 
+GENRE_CHOICES = (
+    ('horror','HORROR'),
+    ('mystery', 'MYSTERY'),
+    ('thriller','THRILLER'),
+    ('fiction','FICTION'),
+    ('romantic','ROMANTIC'),
+    ('motivational','MOTIVATIONAL'),
+)
+
 class AuthorManager(models.Manager):
     def get_queryset(self):
         return AuthorQuerySet(self.model, using=self._db)
@@ -31,6 +40,7 @@ class Book(models.Model):
     title = models.CharField(max_length=30)
     copies_sold = models.PositiveIntegerField()
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+    genre = models.CharField(max_length=20, choices=GENRE_CHOICES, default='fiction')
 
     def __str__(self):
         return self.title
