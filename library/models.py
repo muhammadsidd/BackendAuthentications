@@ -22,7 +22,8 @@ class AuthorManager(models.Manager):
 
     def annotate_with_copies_sold(self):
         return self.get_queryset().annotate_with_copies_sold()
-
+#However you will no be able to use it on QuerySet object like:
+#author_books = Author.objects.filter(id=2).total_copies_sold()
 class AuthorQuerySet(models.QuerySet):
     def annotate_with_copies_sold(self):
         return self.annotate(copies_sold=Sum('books__copies_sold'))
