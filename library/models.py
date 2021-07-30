@@ -26,7 +26,9 @@ class AuthorManager(models.Manager):
 #author_books = Author.objects.filter(id=2).total_copies_sold()
 
 #That is because you are annotating Author object, not a QuerySet. To obtain that result you should execute:
-
+# Author.objects.annotate_with_copies_sold().get(id=2)
+# author.copies_sold 
+# 15
 
 class AuthorQuerySet(models.QuerySet):
     def annotate_with_copies_sold(self):
