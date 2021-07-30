@@ -57,7 +57,7 @@ class UserViewset(viewsets.ViewSet):
         serializer = self.serializer_class(queryset, many = True)
         
         return Response(serializer.data)
-    
+    #create requires serializer.save()
     def create(self, request):
         if request.user.is_authenticated:
             serializer = self.serializer_class(data=request.data)
@@ -75,7 +75,7 @@ class UserViewset(viewsets.ViewSet):
         user = get_object_or_404(queryset, pk=pk)
         serializer = self.serializer_class(user)
         return Response(serializer.data)
-    
+    #update requires serializer.save()
     def update(self, request, pk = None):
         serializer = self.serializer_class(request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
