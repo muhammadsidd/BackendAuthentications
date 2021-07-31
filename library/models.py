@@ -32,7 +32,7 @@ class AuthorManager(models.Manager):
 
 class AuthorQuerySet(models.QuerySet):
     def annotate_with_copies_sold(self):
-        return self.annotate(copies_sold=Sum('books__copies_sold'))
+        return self.annotate(copies_sold=Coalesce(Sum('books__copies_sold'),0))
 
 class Author(models.Model):
     objects = AuthorManager()
