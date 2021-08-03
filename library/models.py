@@ -16,6 +16,7 @@ GENRE_CHOICES = (
     ('motivational','MOTIVATIONAL'),
 )
 
+##add updated query set to the manager
 class AuthorManager(models.Manager):
     def get_queryset(self):
         return AuthorQuerySet(self.model, using=self._db)
@@ -30,6 +31,7 @@ class AuthorManager(models.Manager):
 # author.copies_sold 
 # 15
 
+##add anotate to queryset model
 class AuthorQuerySet(models.QuerySet):
     def annotate_with_copies_sold(self):
         return self.annotate(copies_sold=Coalesce(Sum('books__copies_sold'),0))

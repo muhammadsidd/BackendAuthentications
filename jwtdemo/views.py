@@ -51,6 +51,9 @@ class UserViewset(viewsets.ViewSet):
     serializer_class = UserSerializer
     filter_backends =(filters.SearchFilter,)
     search_fields = ('email','first_name','last_name')
+    ##if its a foreign key relation and you want to search it use for example 
+    ## boook which has a author under auther there is name so u would put search as 'auther__name' 
+    ## in book queryset (view)
 
     def list(self, request):
         queryset = User.objects.all()
