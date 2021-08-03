@@ -17,6 +17,7 @@ from .import permissions1
 from jwtdemo import serializers
 from rest_framework import filters
 import json
+from rest_framework_simplejwt.authentication import JWTAuthentication
 # from django.http import Http404
 # from django.shortcuts import render
 # from rest_framework import viewsets, status, mixins, generics
@@ -44,46 +45,46 @@ def registration(request):
 
     return response.Response(res, status.HTTP_201_CREATED)
 
-class UserViewset(viewsets.ViewSet):
+# class UserViewset(viewsets.ViewSet):
     
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions1.UpdateOwnProfile,)
-    serializer_class = UserSerializer
-    filter_backends =(filters.SearchFilter,)
-    search_fields = ('email','first_name','last_name')
-    ##if its a foreign key relation and you want to search it use for example 
-    ## boook which has a author under auther there is name so u would put search as 'auther__name' 
-    ## in book queryset (view)
+#     authentication_classes = (TokenAuthentication,)
+#     permission_classes = (permissions1.UpdateOwnProfile,)
+#     serializer_class = UserSerializer
+#     filter_backends =(filters.SearchFilter,)
+#     search_fields = ('email','first_name','last_name')
+#     ##if its a foreign key relation and you want to search it use for example 
+#     ## boook which has a author under auther there is name so u would put search as 'auther__name' 
+#     ## in book queryset (view)
 
-    def list(self, request):
-        queryset = User.objects.all()
-        serializer = self.serializer_class(queryset, many = True)
+#     def list(self, request):
+#         queryset = User.objects.all()
+#         serializer = self.serializer_class(queryset, many = True)
         
-        return Response(serializer.data)
-    #create requires serializer.save()
-    def create(self, request):
-        if request.user.is_authenticated:
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid():
-                serializer.save(
-                    created_by=request.user,
-                    modified_by=request.user
-                )
-                return Response(serializer.data, status=201)
+#         return Response(serializer.data)
+#     #create requires serializer.save()
+#     def create(self, request):
+#         if request.user.is_authenticated:
+#             serializer = self.serializer_class(data=request.data)
+#             if serializer.is_valid():
+#                 serializer.save(
+#                     created_by=request.user,
+#                     modified_by=request.user
+#                 )
+#                 return Response(serializer.data, status=201)
         
-        raise PermissionDenied
+#         raise PermissionDenied
     
-    def retrieve(self, request, pk=None):
-        queryset = User.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = self.serializer_class(user)
-        return Response(serializer.data)
-    #update requires serializer.save()
-    def update(self, request, pk = None):
-        serializer = self.serializer_class(request.user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+#     def retrieve(self, request, pk=None):
+#         queryset = User.objects.all()
+#         user = get_object_or_404(queryset, pk=pk)
+#         serializer = self.serializer_class(user)
+#         return Response(serializer.data)
+#     #update requires serializer.save()
+#     def update(self, request, pk = None):
+#         serializer = self.serializer_class(request.user, data=request.data, partial=True)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class FibNumViewset(APIView):
     def get (self, reuest, format= None):
@@ -116,5 +117,30 @@ class FibNumViewset(APIView):
         return Response (json.dumps(d1))
 
 
+class UserViewSet2(viewsets.ModelViewSet):
+    # authentication_classes = (JWTAuthentication, )    ## added in setting.py file as global 
+    # permission_classes = (permissions.IsAuthenticated, ) ##added in settings.py file as global 
+    #once you have set the JWTTokenAuth in global you have to set default permissions as well in global or local
+    serializer_class = UserSerializer
+    filter_backends =(filters.SearchFilter,)
+    search_fields = ('email','first_name','last_name')
+    queryset = User.objects.all()
 
+    def create(self, request):
+        if request.user.is_authenticated:
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                serializer.save(
+                    created_by=request.user,
+                    modified_by=request.user
+                )
+                return Response(serializer.data, status=201)
+        
+        raise PermissionDenied
+    
+    def update(self, request, pk = None):
+        serializer = self.serializer_class(request.user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 

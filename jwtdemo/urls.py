@@ -13,8 +13,8 @@ from rest_framework.routers import DefaultRouter
 from . import views
 from .views import FibNumViewset, registration
 router = DefaultRouter()
-router.register('user-viewset', views.UserViewset, basename='user-viewset')
-
+# router.register('user-viewset', views.UserViewset, basename='user-viewset')
+router.register('user-viewset', views.UserViewSet2)
 urlpatterns =[
     url(r'',include(router.urls)),
     path('register/', registration, name = 'register'),
