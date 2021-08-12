@@ -58,7 +58,7 @@ def registration(request):
 
 #     def list(self, request):
 #         queryset = User.objects.all()
-#         serializer = self.serializer_class(queryset, many = True
+#         serializer = self.serializer_class(queryset, many = True)
         
 #         return Response(serializer.data)
 #     #create requires serializer.save()
